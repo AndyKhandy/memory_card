@@ -11,6 +11,9 @@ export default function usePokeData() {
 
       const fetchPromises = randomIDs.map(async (id) => {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        if(!response.ok){
+          throw new Error(`Failed to fetch ID ${id}`);
+        }
         const { name, sprites } = await response.json();
         return { name, sprites, id };
       });
@@ -20,11 +23,11 @@ export default function usePokeData() {
     } catch (error) {
       console.log("eror fetching data: ", error);
     } finally {
-      await new Promise((resolve)=>{
-        setTimeout(()=>{
-            resolve('done');
-        },500)
-      })
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve("done");
+        }, 1500);
+      });
       setLoading(false);
     }
   };
@@ -33,8 +36,7 @@ export default function usePokeData() {
     fetchPokeData(10);
   }, []);
 
-  console.log(totalData);
-  return { totalData, loading, setTotalData, fetchPokeData};
+  return { totalData, loading, setTotalData, fetchPokeData };
 }
 
 async function getCountRandomNumbers(count) {
