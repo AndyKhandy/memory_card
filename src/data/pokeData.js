@@ -26,7 +26,7 @@ export default function usePokeData() {
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve("done");
-        }, 1500);
+        }, 1000);
       });
       setLoading(false);
     }

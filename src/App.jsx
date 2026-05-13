@@ -3,6 +3,7 @@ import "./App.css";
 import usePokeData from "./data/pokeData";
 import CardHolder from "./components/CardHolder";
 import { shuffle } from "./data/shuffle";
+import PokeForm from "./components/PokeForm";
 
 export function App() {
   const [bestScore, setBestScore] = useState(0);
@@ -33,32 +34,40 @@ export function App() {
     fetchPokeData(numPokemon);
   };
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    fetchPokeData(numPokemon);
+  };
+
   if (loading) {
-    return <h1>Searching through the grass for Pokemon...</h1>;
+    return (
+      <h1 id="fetch-display">
+        Searching through the grass for {bestScore > 0 ? "new " : ""}Pokemon...
+      </h1>
+    );
   }
 
   return (
-    <div>
-      <div id="scores">
-        <h2>Best Guess: {bestScore}</h2>
-        <h2>Score: {currentScore}</h2>
-      </div>
-      <h1>PokeGuess</h1>
-      <p>
-        Get points by clicking on an image but don't click on any more than once
-        or you'll lose your streak!
-      </p>
-      <label htmlFor="pokeAmount">Pokemon Amount</label>
-      <input
-        type="number"
-        id="pokeAmount"
-        value={numPokemon}
-        placeholder="30"
-        onChange={(e) => setNumPokemon(e.target.value)}
-        min="1"
-        max="20"
-      />
-      <button onClick={() => fetchPokeData(numPokemon)}>Submit Amount</button>
+    <div className="main-screen grid">
+      <header className="flex">
+        <div className="header-text">
+          <h1 id="title">PokeGuess</h1>
+          <p>
+            Get points by clicking on an image but don't click on any more than
+            once or you'll lose your streak!
+          </p>
+        </div>
+        <PokeForm
+          numPokemon={numPokemon}
+          setNumPokemon={setNumPokemon}
+          handleForm={handleFormSubmit}
+        />
+
+        <div id="scores">
+          <h2>Best Guess: {bestScore}</h2>
+          <h2>Score: {currentScore}</h2>
+        </div>
+      </header>
       <CardHolder data={totalData} handleClick={handleClick} />
     </div>
   );
